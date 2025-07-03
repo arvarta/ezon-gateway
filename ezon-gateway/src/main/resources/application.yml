@@ -1,0 +1,121 @@
+spring:
+ cloud:
+  gateway:
+    globalcors:
+      corsConfigurations:
+        '[/**]':
+          allowedOrigins:
+            - "http://localhost:30000"
+          allowedMethods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+            - OPTIONS
+          allowedHeaders:
+            - "*"
+          allowCredentials: true
+          exposedHeaders: "Set-Cookie"
+
+    routes:
+      - id: mall-auth
+        uri: http://localhost:10000
+        predicates:
+          - Path=/auth/**
+      - id: mall-auth-user
+        uri: http://localhost:10000
+        predicates:
+          - Path=/api/user/**
+
+
+      - id: mall-auth-profile
+        uri: http://localhost:10000
+        predicates:
+          - Path=/api/profile/**
+
+      - id: product-service
+        uri: http://localhost:10100
+        predicates:
+          - Path=/api/products/**
+
+      - id: product-search-service
+        uri: http://localhost:10100
+        predicates:
+          - Path=/api/search/**
+
+      - id: product-reviews-service
+        uri: http://localhost:10100
+        predicates:
+          - Path=/api/reviews/**
+
+      - id: order-service
+        uri: http://localhost:10200
+        predicates:
+          - Path=/api/orders/**
+
+      - id: mall-cart
+        uri: http://localhost:10300
+        predicates:
+          - Path=/api/cart/**
+
+      - id: payment-service
+        uri: http://localhost:10400
+        predicates:
+          - Path=/api/payment/**
+
+      - id: deleverey-service
+        uri: http://localhost:10500
+        predicates:
+          - Path=/api/delivery/**
+
+      - id: #not
+        uri: http://localhost:10600
+        predicates:
+          - Path=/api/oneToOnes/**
+
+      - id: mall-customer
+        uri: http://localhost:10700
+        predicates:
+          - Path=/api/customer/**
+
+      - id: settlememt
+        uri: http://localhost:10800
+        predicates:
+          - Path=/api/settlement/**
+
+      - id: mall-wish
+        uri: http://localhost:10900
+        predicates:
+          - Path=/api/wish/**
+
+      - id: ezonClient
+        uri: http://localhost:30000
+        predicates:
+          - Path=/css/**,/js/**,/images/**,/favicon.ico
+# REDIS
+ session:
+  redis:
+#필수
+    namespace: mall:frontend
+    flush-mode: on-save
+    save-mode: on-set-attribute
+ data:
+  redis:
+   host: localhost
+   port: 6379
+
+
+server:
+ servlet:
+  session:
+   cookie:
+    secure: false
+#필수
+    path: /
+    name: SESSION
+    domain: localhost
+    same-site: lax
+
+app:
+  secret:
+    my-key: super-secret-custom-key-456
